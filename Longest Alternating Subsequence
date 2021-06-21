@@ -1,0 +1,55 @@
+class Solution{
+	public:
+	   // int fun(int n,vector<int>&v,int prev,int x)// x= prev_reference
+	   //  {  if(n==0)   // Recursive : Exponential Time Complexity
+	   //       return 0;
+	   //     if(x==1)
+	   //     {  if(v[n-1]<prev)
+	   //          return max(1+fun(n-1,v,v[n-1],!x),fun(n-1,v,prev,x));
+	   //        else
+	   //          return fun(n-1,v,prev,x);
+	   //     } 
+	   //     else
+	   //     {  if(prev<v[n-1])
+	   //          return max(1+fun(n-1,v,v[n-1],!x),fun(n-1,v,prev,x));
+	   //        else
+	   //          return fun(n-1,v,prev,x);
+	   //     }
+	   //  }
+     // 		int AlternatingaMaxLength(vector<int>&v){
+     // 		    int n=v.size();
+     // 		     return max(fun(n,v,INT_MAX,1),fun(n,v,INT_MIN,0));  
+     // 	}
+
+       int fun(bool x,vector<int>&v)
+       {   stack<int>st;             // This function also can be optimized : We only needed current top element : Thus Space Complexity becomes: O(1)
+          st.push(v[0]);
+            for(int i=1;i<v.size();++i)
+            {  if(x==true) // Next element should be increasing
+               {  if(st.top()<v[i])
+                   {    st.push(v[i]);
+                        x=!x;
+                   }
+                  else{
+                      st.pop();
+                      st.push(v[i]);
+                  }
+               }
+              else   // Next element should be decreasing
+               { if(v[i]<st.top())
+                   {  st.push(v[i]);
+                      x=!x; 
+                   }
+                  else{
+                      st.pop();
+                      st.push(v[i]); 
+                  }
+               }
+            }
+		     return st.size();
+     }
+		int AlternatingaMaxLength(vector<int>&v){
+		    return max(fun(true,v),fun(false,v));
+		}
+		
+};
